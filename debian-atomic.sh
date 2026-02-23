@@ -129,6 +129,16 @@ openssl req -new -x509 -newkey rsa:2048 -nodes -days 3650 \
     -keyout $TARGET/etc/kernel/mok/mok.key \
     -out $TARGET/etc/kernel/mok/mok.crt
 
+# 5.1 Registrar la llave en la NVRAM para Secure Boot
+echo "-------------------------------------------------------"
+echo " CONFIGURANDO CONTRASEÑA MOK (NECESARIA AL REINICIAR)"
+echo "-------------------------------------------------------"
+# Convertimos el crt a formato DER (que es el que prefiere mokutil/shim)
+openssl x509 -in $TARGET/etc/kernel/mok/mok.crt -out $TARGET/etc/kernel/mok/mok.der -outform DER
+
+# Lanzamos el import (Te pedirá la clave por consola)
+chroot $TARGET mokutil --import /etc/kernel/mok/mok.der
+
 # 6. SWAP CIFRADO ALEATORIO (Efímero)
 chroot $TARGET bash -c "
   truncate -s 0 /var/swapfile
