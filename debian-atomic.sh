@@ -156,6 +156,8 @@ EOF
 
 # 8. GENERACIÓN DEL UKI (Unified Kernel Image) FIRMADO
 CMDLINE="rw quiet splash root=$ROOT_A rootflags=subvol=@ psi=1 preempt=full binder.devices=binder,vndbinder,hwbinder devtmpfs.mount=1"
+# Dentro del chroot, antes de generar el UKI:
+echo 'add_dracutmodules+=" systemd btrfs "' > /etc/dracut.conf.d/10-atomic.conf
 
 mkdir -p $TARGET/boot/efi
 mount $EFI_PART $TARGET/boot/efi
