@@ -136,8 +136,8 @@ echo "-------------------------------------------------------"
 # Convertimos el crt a formato DER (que es el que prefiere mokutil/shim)
 openssl x509 -in $TARGET/etc/kernel/mok/mok.crt -out $TARGET/etc/kernel/mok/mok.der -outform DER
 
-# Lanzamos el import (Te pedirá la clave por consola)
-chroot $TARGET mokutil --import /etc/kernel/mok/mok.der
+# Versión automatizada (Contraseña: mokka)
+echo -e "mokka\nmokka" | chroot $TARGET mokutil --import /etc/kernel/mok/mok.der
 
 # 6. SWAP CIFRADO ALEATORIO (Efímero)
 chroot $TARGET bash -c "
